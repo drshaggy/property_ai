@@ -5,11 +5,11 @@ import {
     StateGraph,
     MemorySaver,
 } from "@langchain/langgraph";
-import { CallModel } from './requirements-agent';
+import { CallAgent } from './requirements-agent';
 
 // Defines the state graph
 const workflow = new StateGraph(MessagesAnnotation)
-    .addNode("model", CallModel)
+    .addNode("model", CallAgent)
     .addEdge(START, "model")
     .addEdge("model", END);
 
