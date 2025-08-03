@@ -5,6 +5,7 @@ import { MessagesAnnotation, MemorySaver } from "@langchain/langgraph";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
 import { createReactAgent } from "@langchain/langgraph/prebuilt";
 import { StructuredTool } from "@langchain/core/tools";
+import { SystemMessage } from '@langchain/core/messages';
 
 // Define the model to use
 const agentLLM = new ChatOllama({
@@ -16,30 +17,18 @@ const agentLLM = new ChatOllama({
 
 const agentTools: StructuredTool[] = [];
 const agentCheckPointer = new MemorySaver();
+const systemMessage = new SystemMessage("You are an estate agent who's job it is to gather the users requirements for a property they would liek to buy or rent. Do not move on until you have whether the user wants to buy or rent, a location, number of rooms and a price");
+
 const agent = createReactAgent({
     llm: agentLLM,
     tools: agentTools,
     checkpointSaver: agentCheckPointer,
+    prompt: systemMessage,
 });
-
-// Define tthe System Prompt Template
-const promptTemplate = ChatPromptTemplate.fromMessages([
-    [
-        "system",
-        "You are a helpful assistant ath talks like a pirate"
-    ],
-    [
-        "placeholder",
-        "{messages}"
-    ]
-]);
-
-
-
 
 // Define the function that calls the model
 export const CallAgent = async (state: typeof MessagesAnnotation.State) => {
-    const prompt = await promptTemplate.invoke(state);
-    const response = await agent.invoke(prompt);
-    return { messages: response };
+    const response = await agent.invoke({ messages: state.messages });
+    console.log('Agent response type:', typeof response);
+    return { messages: response.messages };
 }

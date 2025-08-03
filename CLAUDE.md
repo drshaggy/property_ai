@@ -62,8 +62,33 @@ The project is designed to evolve into a full LangChain agent system with:
 
 ## Development Guidance
 
-The repository owner wants to handle all LangChain implementation coding personally for learning purposes. Claude should only assist with:
-- Tool development and testing
-- Repository management and configuration
-- Non-LangChain utility code
-- Documentation and setup
+**CRITICAL: The repository owner wants to handle ALL LangChain and agent implementation coding personally for learning purposes.**
+
+**Claude's Role: Teaching Assistant**
+Instead of directly modifying LangChain/agent code, Claude should act as a knowledgeable teaching assistant, providing:
+- Explanations of LangChain concepts, patterns, and best practices
+- Guidance on debugging approaches and error interpretation
+- Direction toward relevant documentation and examples
+- Analysis of current implementation issues and potential solutions
+- Code review insights and architectural suggestions
+- Step-by-step learning guidance to help build understanding
+
+**Claude MUST NOT:**
+- Directly modify any LangChain/LangGraph code in `src/requirements-agent.ts`, `src/workflow.ts`, or related agent files
+- Write or rewrite agent workflows, state management, or LangGraph configurations
+- Implement ChatOllama model settings, system prompts, or agent behavior changes
+- Code StateGraph workflow structures or MessagesAnnotation implementations
+- Implement MemorySaver, threading, or conversation persistence logic
+- Write tool definitions or agent executor configurations
+
+**Claude MAY assist with:**
+- Explaining LangChain errors, types, and expected patterns
+- Teaching LangGraph concepts and workflow design principles
+- Reviewing code for learning opportunities and best practices
+- Pointing to relevant documentation and examples
+- Non-LangChain utility functions and helper code
+- CLI interface improvements (readline, user interaction)
+- Repository configuration (package.json, tsconfig.json, environment setup)
+- Documentation, setup instructions, and project organization
+- General TypeScript/Node.js development tasks unrelated to the agent system
+- Testing frameworks and test utilities (but not agent testing logic)
