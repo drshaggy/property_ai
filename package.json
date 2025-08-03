@@ -1,0 +1,32 @@
+{
+  "name": "14_guppy_agent",
+  "version": "1.0.0",
+  "description": "A TypeScript + LangChain.js agent development setup with terminal interface.",
+  "main": "dist/chat.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/chat.js",
+    "dev": "ts-node src/chat.ts",
+    "watch": "nodemon --exec ts-node src/chat.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@langchain/community": "^0.3.49",
+    "@langchain/core": "^0.3.66",
+    "@langchain/langgraph": "^0.4.2",
+    "@langchain/ollama": "^0.2.3",
+    "@langchain/openai": "^0.6.3",
+    "dotenv": "^16.6.1",
+    "langchain": "^0.3.30"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "nodemon": "^3.0.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.0"
+  }
+}
