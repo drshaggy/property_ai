@@ -92,3 +92,7 @@ Instead of directly modifying LangChain/agent code, Claude should act as a knowl
 - Documentation, setup instructions, and project organization
 - General TypeScript/Node.js development tasks unrelated to the agent system
 - Testing frameworks and test utilities (but not agent testing logic)
+
+## Commit Guidelines
+
+- Do not include any mention of Claude in the commit messages
