@@ -1,6 +1,6 @@
-# Guppy Agent - LangGraph Development Environment
+# Property AI - LangGraph Development Environment
 
-A TypeScript + LangChain.js agent development setup using LangGraph workflows with Ollama integration.
+A TypeScript + LangChain.js agent architecture for property-related AI tools, built on LangGraph workflows and integrated with Ollama.
 
 ## Setup
 
@@ -37,7 +37,7 @@ A TypeScript + LangChain.js agent development setup using LangGraph workflows wi
 
 ## Current Implementation
 
-This is a LangGraph-based agent using:
+This project is a LangGraph-based property AI agent using:
 - **LangGraph StateGraph** with MessagesAnnotation for conversation state
 - **Ollama ChatOllama** with granite3.2:8b model
 - **MemorySaver** for persistent conversation memory
@@ -46,8 +46,9 @@ This is a LangGraph-based agent using:
 
 ### Project Structure
 
-- `src/agent.ts` - LangGraph workflow with StateGraph, model configuration, and memory
-- `src/chat.ts` - Simple test harness demonstrating agent invocation
+- `src/requirements-agent.ts` - LangGraph agent that handles requirement gathering with memory and personality
+- `src/workflow.ts` - Defines the StateGraph-based workflow logic
+- `src/cli-chat.ts` - CLI interface for chatting with the agent
 - `package.json` - Dependencies including @langchain/langgraph and @langchain/ollama
 - `tsconfig.json` - TypeScript configuration with CommonJS modules
 
@@ -76,9 +77,9 @@ const output = await app.invoke({ messages: input }, config);
 
 ### Available Scripts
 
-- `npm run dev` - Run chat.ts in development mode with ts-node
+- `npm run dev` - Run cli-chat.ts in development mode with ts-node
 - `npm run build` - Build TypeScript to JavaScript in ./dist
-- `npm start` - Run the built application from dist/chat.js
+- `npm start` - Run the built application from dist/cli-chat.js
 - `npm run watch` - Run with file watching using nodemon
 - `tsc --noEmit` - Type check without building
 
