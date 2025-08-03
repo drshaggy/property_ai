@@ -1,17 +1,11 @@
 import { config as dotenvConfig } from 'dotenv';
 dotenvConfig();
 import { ChatOllama } from "@langchain/ollama";
-import {
-    START,
-    END,
-    MessagesAnnotation,
-    StateGraph,
-    MemorySaver,
-} from "@langchain/langgraph";
+import { MessagesAnnotation } from "@langchain/langgraph";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
 
 // Define the model to use
-export const llm = new ChatOllama({
+const llm = new ChatOllama({
     model: "granite3.2:8b",
     temperature: 0.7,
     maxRetries: 2,
@@ -32,18 +26,8 @@ const promptTemplate = ChatPromptTemplate.fromMessages([
 
 
 // Define the function that calls the model
-const CallModel = async (state: typeof MessagesAnnotation.State) => {
+export const CallModel = async (state: typeof MessagesAnnotation.State) => {
     const prompt = await promptTemplate.invoke(state);
     const response = await llm.invoke(prompt);
     return { messages: response };
 }
-
-// Defines the state graph
-const workflow = new StateGraph(MessagesAnnotation)
-    .addNode("model", CallModel)
-    .addEdge(START, "model")
-    .addEdge("model", END);
-
-// add memory
-const memory = new MemorySaver();
-export const app = workflow.compile({ checkpointer: memory });

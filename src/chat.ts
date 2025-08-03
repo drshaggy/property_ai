@@ -1,4 +1,4 @@
-import { app } from './agent';
+import { app } from './workflow';
 import { v4 as uuidv4 } from "uuid";
 
 const input = [
