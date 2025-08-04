@@ -20,6 +20,7 @@
         "@langchain/langgraph": "^0.4.2",
         "@langchain/ollama": "^0.2.3",
         "@langchain/openai": "^0.6.3",
+        "@langchain/tavily": "^0.1.4",
         "dotenv": "^16.6.1",
         "langchain": "^0.3.30"
     },

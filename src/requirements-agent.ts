@@ -2,10 +2,11 @@ import { config as dotenvConfig } from 'dotenv';
 dotenvConfig();
 import { ChatOllama } from "@langchain/ollama";
 import { MessagesAnnotation, MemorySaver } from "@langchain/langgraph";
-import { ChatPromptTemplate } from "@langchain/core/prompts";
 import { createReactAgent } from "@langchain/langgraph/prebuilt";
 import { StructuredTool } from "@langchain/core/tools";
 import { SystemMessage } from '@langchain/core/messages';
+import { TavilySearch } from "@langchain/tavily";
+import { ChatPromptTemplate, MessagesPlaceholder } from "@langchain/core/prompts";
 
 // Define the model to use
 const agentLLM = new ChatOllama({
@@ -15,15 +16,18 @@ const agentLLM = new ChatOllama({
     baseUrl: process.env.OLLAMA_URL || 'http://localhost:11434',
 });
 
-const agentTools: StructuredTool[] = [];
+const searchTool = new TavilySearch({ maxResults: 3, topic: "general" })
+const agentTools = [searchTool] as any;
+const noTools: StructuredTool[] = [];
 const agentCheckPointer = new MemorySaver();
-const systemMessage = new SystemMessage("You are an estate agent who's job it is to gather the users requirements for a property they would liek to buy or rent. Do not move on until you have whether the user wants to buy or rent, a location, number of rooms and a price");
+const systemMessage = "You are an estate agent who's job it is to gather the users requirements for a property they would liek to buy or rent. Do not move on until you have whether the user wants to buy or rent, a location, number of rooms and a price.";
+const testMessage = "You are a helpful assitant with these tools available to help solve the query {tools}";
 
 const agent = createReactAgent({
     llm: agentLLM,
     tools: agentTools,
     checkpointSaver: agentCheckPointer,
-    prompt: systemMessage,
+    prompt: testMessage,
 });
 
 // Define the function that calls the model
