@@ -5,12 +5,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Common Development Commands
 
 - **Install dependencies**: `npm install`
-- **Development mode**: `npm run dev` (runs `ts-node src/chat.ts`)
+- **Development mode**: `npm run dev` (runs `ts-node src/cli-chat.ts`)
 - **Build TypeScript**: `npm run build` or `tsc`
-- **Run built application**: `npm start` (runs `node dist/chat.js`)
+- **Run built application**: `npm start` (runs `node dist/cli-chat.js`)
 - **Watch mode with auto-restart**: `npm run watch` (uses nodemon)
 - **Type check only**: `tsc --noEmit`
-- **Test agent directly**: `npx ts-node src/agent.ts` or `npx tsx src/agent.ts`
+- **Test requirements agent**: `npx ts-node src/requirements-agent.ts`
+- **Test custom agent**: `npx ts-node src/agent.ts`
 
 ## Project Architecture
 
@@ -18,9 +19,13 @@ This is a LangChain.js agent development environment built with TypeScript. Curr
 
 ### Current Implementation
 
-- **`src/agent.ts`**: LangGraph workflow implementation using `ChatOllama` with `granite3.2:8b` model and pirate personality. Uses `StateGraph` with `MessagesAnnotation`, `MemorySaver` for persistence, and `ChatPromptTemplate` for system prompts. Connects to local Ollama instance (configurable via `OLLAMA_URL` env var, defaults to `http://localhost:11434`).
+- **`src/requirements-agent.ts`**: ReAct agent built with `createReactAgent` from LangGraph prebuilt. Uses `ChatOllama` with `granite3.2:8b` model, configured for estate agent requirements gathering. Includes `TavilySearch` tool for web searches and `MemorySaver` for conversation persistence.
 
-- **`src/chat.ts`**: Simple test harness that invokes the agent workflow with a hardcoded message and UUID-based thread configuration. Currently demonstrates basic agent invocation pattern.
+- **`src/agent.ts`**: Custom LangGraph workflow using manual `StateGraph` construction with `ToolNode`. Demonstrates lower-level graph building with explicit tool integration and TavilySearch integration.
+
+- **`src/workflow.ts`**: Workflow definition module that works with the agent system, defining StateGraph-based conversation flow.
+
+- **`src/cli-chat.ts`**: Terminal-based chat interface that connects to the requirements agent, providing interactive conversation flow with the estate agent.
 
 ### Target Architecture (To Be Implemented)
 
@@ -35,6 +40,7 @@ The project is designed to evolve into a full LangChain agent system with:
 
 **Required environment variables:**
 - `OLLAMA_URL`: Ollama server endpoint (defaults to `http://localhost:11434`)
+- `TAVILY_API_KEY`: For TavilySearch web search functionality
 - `OPENROUTER_API_KEY`: For OpenRouter cloud models (when implemented)
 - `LANGSMITH_API_KEY`: For LangSmith tracing and debugging
 - `LANGSMITH_TRACING`: Enable/disable LangSmith tracing
@@ -50,14 +56,31 @@ The project is designed to evolve into a full LangChain agent system with:
 - Memory persistence handled by `MemorySaver` with thread-based configuration
 - Environment variables loaded via `dotenv` package
 
+### Known Issues & Solutions
+
+**Type Errors with TavilySearch and ToolNode:**
+- Issue: "Type instantiation is excessively deep and possibly infinite" when using `TavilySearch` with `ToolNode`
+- Root cause: Zod version compatibility issues between LangChain packages
+- Solution: Added Zod version override in package.json:
+  ```json
+  "overrides": {
+    "zod": "3.25.67"
+  }
+  ```
+- Reference: [LangGraphJS Issue #1453](https://github.com/langchain-ai/langgraphjs/issues/1453)
+
 ### Current Implementation Details
 
-- **Model**: Ollama with `granite3.2:8b` model (configured in agent.ts)
+- **Model**: Ollama with `granite3.2:8b` model 
 - **Temperature**: Set to 0.7 for balanced creativity/consistency
 - **Max Retries**: Set to 2 for reliability
-- **System Prompt**: Currently configured with pirate personality ("You are a helpful assistant ath talks like a pirate")
+- **Requirements Agent**: Estate agent personality for property requirement gathering
+- **Tools**: TavilySearch for web search capabilities
 - **State Management**: Uses LangGraph's `MessagesAnnotation` for handling conversation state
-- **Workflow**: Single-node graph that processes messages through the model
+- **Workflows**: 
+  - `createReactAgent`: Prebuilt ReAct agent (requirements-agent.ts)
+  - Custom `StateGraph`: Manual graph construction (agent.ts)
+  - StateGraph workflow definitions (workflow.ts)
 - **Threading**: Each conversation gets a unique thread ID via `uuidv4()`
 
 ## Development Guidance

@@ -14,12 +14,13 @@ A TypeScript + LangChain.js agent architecture for property-related AI tools, bu
    - Pull the granite model: `ollama pull granite3.2:8b`
    - Ensure Ollama is running on `http://localhost:11434` (default)
 
-3. **Configure environment (optional):**
+3. **Configure environment:**
    ```bash
-   # Create .env file if you need custom settings
+   # Create .env file
    OLLAMA_URL=http://localhost:11434
-   LANGSMITH_API_KEY=your_key_here
-   LANGSMITH_TRACING=true
+   TAVILY_API_KEY=your_tavily_key_here  # Required for web search functionality
+   LANGSMITH_API_KEY=your_key_here      # Optional for tracing
+   LANGSMITH_TRACING=true               # Optional
    ```
 
 4. **Run the agent:**
@@ -31,7 +32,8 @@ A TypeScript + LangChain.js agent architecture for property-related AI tools, bu
    npm run build
    npm start
    
-   # Test agent directly
+   # Test agents directly
+   npx ts-node src/requirements-agent.ts
    npx ts-node src/agent.ts
    ```
 
@@ -46,10 +48,11 @@ This project is a LangGraph-based property AI agent using:
 
 ### Project Structure
 
-- `src/requirements-agent.ts` - LangGraph agent that handles requirement gathering with memory and personality
-- `src/workflow.ts` - Defines the StateGraph-based workflow logic
-- `src/cli-chat.ts` - CLI interface for chatting with the agent
-- `package.json` - Dependencies including @langchain/langgraph and @langchain/ollama
+- `src/requirements-agent.ts` - ReAct agent using `createReactAgent` for estate agent requirements gathering
+- `src/agent.ts` - Custom LangGraph workflow with manual StateGraph construction and TavilySearch integration
+- `src/workflow.ts` - StateGraph workflow definitions and flow management
+- `src/cli-chat.ts` - Terminal-based chat interface for agent interaction
+- `package.json` - Dependencies including @langchain/langgraph, @langchain/ollama, and @langchain/tavily
 - `tsconfig.json` - TypeScript configuration with CommonJS modules
 
 ## Usage

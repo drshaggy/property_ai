@@ -1,7 +1,7 @@
 {
-    "name": "14_guppy_agent",
+    "name": "property_ai",
     "version": "1.0.0",
-    "description": "A TypeScript + LangChain.js agent development setup with terminal interface.",
+    "description": "LangGraph-based property AI agent system with TypeScript, featuring ReAct agents, custom StateGraph workflows, and TavilySearch integration.",
     "main": "dist/cli-chat.js",
     "scripts": {
         "build": "tsc",
@@ -10,7 +10,7 @@
         "watch": "nodemon --exec ts-node src/cli-chat.ts",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
-    "keywords": [],
+    "keywords": ["langchain", "langgraph", "ai", "agent", "property", "typescript", "ollama", "tavily"],
     "author": "",
     "license": "ISC",
     "type": "commonjs",
@@ -29,5 +29,8 @@
         "nodemon": "^3.0.1",
         "ts-node": "^10.9.1",
         "typescript": "^5.0.0"
+    },
+    "overrides": {
+        "zod": "3.25.67"
     }
 }

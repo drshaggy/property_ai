@@ -32,7 +32,7 @@ async function main() {
         const output = await app.invoke({ messages }, config);
         const reply = output.messages[output.messages.length - 1].content;
 
-        console.log("AI: ", reply);
+        console.log("> ", reply);
         messages.push({ role: 'assistant', content: reply.toString() });
 
     }
